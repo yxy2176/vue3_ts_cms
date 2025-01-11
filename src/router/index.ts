@@ -9,7 +9,7 @@ const router = createRouter({
     },
     {
       path: '/login',
-      component: () => import('../views/login/cmsLogin.vue'),
+      component: () => import('../views/login/Login.vue'),
     },
     {
       path: '/main',
