@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AxiosInstance } from 'axios'
+import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import type { CMSRequestConfig } from './type'
 
 // 拦截器: 蒙版Loading/token/修改配置
@@ -42,7 +42,7 @@ class CMSRequest {
 
     // 针对特定的cmsRequest实例添加拦截器
     this.instance.interceptors.request.use(
-      // config.interceptors?.requestSuccessFn,
+      config.interceptors?.requestSuccessFn,
       config.interceptors?.requestFailureFn,
     )
     this.instance.interceptors.response.use(
@@ -55,8 +55,26 @@ class CMSRequest {
   // T => IHomeData
   request<T = any>(config: CMSRequestConfig<T>) {
     // 单次请求的成功拦截处理
+    // if (config.interceptors?.requestSuccessFn) {
+    //   config = config.interceptors.requestSuccessFn(config)
+    // }
+    // 单次请求的成功拦截处理
     if (config.interceptors?.requestSuccessFn) {
-      config = config.interceptors.requestSuccessFn(config)
+      const successFn = config.interceptors.requestSuccessFn
+
+      // 确保传入的参数类型为 InternalAxiosRequestConfig，并处理返回值
+      const result = successFn(config as InternalAxiosRequestConfig)
+
+      // 如果成功拦截处理返回的是 Promise，需要等待它解析
+      if (result instanceof Promise) {
+        return result.then((resolvedConfig) => {
+          // 处理后的配置与 Axios 请求相结合
+          return this.instance.request(resolvedConfig)
+        })
+      }
+
+      // 如果直接返回了配置，继续执行请求
+      config = result
     }
 
     // 返回Promise

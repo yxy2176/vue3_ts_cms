@@ -7,3 +7,15 @@ export function accountLoginRequest(account: IAccount) {
     data: account,
   })
 }
+
+export function getUserInfoById(id: number) {
+  return cmsRequest.get({
+    url: `/users/${id}`,
+  })
+}
+
+export function getUserMenusByRoleId(id:number){
+  return cmsRequest.get({
+    url:`/role/${id}/menu`
+  })
+}
