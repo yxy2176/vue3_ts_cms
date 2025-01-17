@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>user.vue</h3>
+    <h3>user-search.vue</h3>
   </div>
 </template>
 <script setup lang="ts"></script>
