@@ -5,9 +5,10 @@ import {
 } from '@/service/login/login'
 import type { IAccount } from '@/types'
 import { defineStore } from 'pinia'
-import { localCache } from '../../utils/cache'
+import { localCache } from '@/utils/cache'
 import { LOGIN_TOKEN } from '@/global/constants'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 
 interface ILoginState {
   token: string
@@ -18,8 +19,8 @@ interface ILoginState {
 const useLoginStore = defineStore('login', {
   state: (): ILoginState => ({
     token: '',
-    userInfo: '',
-    userMenus: '',
+    userInfo: {},
+    userMenus: [],
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -48,8 +49,27 @@ const useLoginStore = defineStore('login', {
       localCache.setCache('userInfo', userInfo)
       localCache.setCache('userMenus', userMenus)
 
+      // 这里也要动态添加路由！不然刚进页面的时候就都是404了，得刷新才有。
+      const routes = mapMenusToRoutes(userMenus)
+      routes.forEach((route) => router.addRoute('main', route))
+
       // 5、进行页面跳转
       router.push('/main')
+    },
+    // 用户进行刷新的时候默认加载数据
+    loadLocalCacheAction() {
+      const token = localCache.getCache(LOGIN_TOKEN)
+      const userInfo = localCache.getCache('userInfo')
+      const userMenus = localCache.getCache('userMenus')
+      if (token && userInfo && userMenus) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenus = userMenus
+
+        // 动态添加路由
+        const routes = mapMenusToRoutes(userMenus)
+        routes.forEach((route) => router.addRoute('main', route))
+      }
     },
   },
 })
