@@ -38,9 +38,7 @@ const useLoginStore = defineStore('login', {
       this.userInfo = userInfo
 
       // 3、根据用户所处的角色 id 请求用户对应的权限（菜单menus）
-      const userMenusResult = await getUserMenusByRoleId(
-        this.userInfo.role.id,
-      )
+      const userMenusResult = await getUserMenusByRoleId(this.userInfo.role.id)
       // console.log('userMenusResult: ', userMenusResult)
       const userMenus = userMenusResult.data
       this.userMenus = userMenus

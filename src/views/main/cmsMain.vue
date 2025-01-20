@@ -35,4 +35,8 @@ function handleFoldChange(flag: boolean) {
 .main-content {
   height: 100%;
 }
+
+.el-main {
+  background-color: #f0f2f5;
+}
 </style>
