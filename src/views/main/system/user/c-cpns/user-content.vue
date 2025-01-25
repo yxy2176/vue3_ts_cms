@@ -3,7 +3,7 @@
     <!-- 头部部分 -->
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handleNewUserClick">新建用户</el-button>
     </div>
     <!-- 表格区域 -->
     <div class="table">
@@ -31,8 +31,24 @@
           </template>
         </el-table-column>
         <el-table-column align="center" width="150px">
-          <el-button size="small" icon="edit" type="primary" text> 编辑</el-button>
-          <el-button size="small" icon="delete" type="danger" text>删除</el-button>
+          <template #default="scope">
+            <el-button
+              size="small"
+              icon="edit"
+              type="primary"
+              text
+              @click="handleEditBtnClick(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="small"
+              icon="delete"
+              type="danger"
+              @click="handleDeleteBtnClick(scope.row.id)"
+              text
+              >删除</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -80,6 +96,22 @@ function fetchUserListData(formData: any = {}) {
   // 2、发起网络请求
   const queryInfo = { ...pageInfo, ...formData }
   systemStore.postUserListAction(queryInfo)
+}
+
+// 4、编辑和删除逻辑
+const emit = defineEmits(['editClick', 'newClick'])
+// 4.1 编辑部分
+function handleEditBtnClick(itemData: any) {
+  emit('editClick', itemData)
+}
+// 4.2 删除部分
+function handleDeleteBtnClick(id: number) {
+  systemStore.deleteUserByIdAction(id)
+}
+
+// 5、新建用户部分
+function handleNewUserClick(){
+  emit('newClick')
 }
 
 defineExpose({ fetchUserListData })
