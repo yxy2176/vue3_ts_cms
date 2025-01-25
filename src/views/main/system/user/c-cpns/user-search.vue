@@ -9,18 +9,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="真实姓名" prop="realName">
-            <el-input
-              v-model="searchForm.realName"
-              placeholder="请输入查询的真实姓名"
-            />
+            <el-input v-model="searchForm.realName" placeholder="请输入查询的真实姓名" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="手机号码" prop="cellphone">
-            <el-input
-              v-model="searchForm.cellphone"
-              placeholder="请输入查询的手机号码"
-            />
+            <el-input v-model="searchForm.cellphone" placeholder="请输入查询的手机号码" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -36,11 +30,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item
-            label="创建时间"
-            v-model="searchForm.createAt"
-            prop="createAt"
-          >
+          <el-form-item label="创建时间" v-model="searchForm.createAt" prop="createAt">
             <el-date-picker
               type="daterange"
               range-separator="-"
@@ -54,7 +44,7 @@
 
     <div class="btns">
       <el-button icon="Refresh" @click="handleResetClick">重置</el-button>
-      <el-button icon="Search" @click="handleSearchClick">查询</el-button>
+      <el-button icon="Search" @click="handleQueryClick">查询</el-button>
     </div>
   </div>
 </template>
@@ -62,24 +52,29 @@
 import type { ElForm } from 'element-plus'
 import { reactive, ref } from 'vue'
 
-const formRef = ref<InstanceType<typeof ElForm>>()
+const emit = defineEmits(['resetClick', 'queryClick'])
+
 const searchForm = reactive({
   name: '', // 用户名
   realName: '', // 真实姓名
   cellphone: '', // 手机号码
   enable: '', // 状态  -> 1：启用 & 0：禁用
-  createAt: [], // 创建时间（包含 开始时间 和 结束时间）
+  createAt: '', // 创建时间（包含 开始时间 和 结束时间）
 })
+
+const formRef = ref<InstanceType<typeof ElForm>>()
 
 // 重置按钮点击
 function handleResetClick() {
-  console.log('点击了重置按钮')
+  // 1、先将form中的数据全部重置
   formRef.value?.resetFields()
+  // 2、将事件发出去，然后在content内部重新发送网络请求
+  emit('resetClick')
 }
 
 // 查询按钮点击
-function handleSearchClick() {
-  console.log('点击了查询按钮')
+function handleQueryClick() {
+  emit('queryClick', searchForm)
 }
 </script>
 <style lang="less" scoped>

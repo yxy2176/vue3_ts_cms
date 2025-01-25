@@ -18,12 +18,17 @@
     <div class="info">
       <el-dropdown>
         <span class="user-info">
-          <el-avatar :size="30" src="@/assets/img/avatar.jpg" />
+          <el-avatar
+            :size="30"
+            src="@/assets/img/avatar.jpg"
+          />
           <span class="name">JennyYao</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="handleExitClick">
+            <el-dropdown-item
+              @click="handleExitClick"
+            >
               <el-icon><CircleClose /></el-icon>
               <span>退出系统</span>
             </el-dropdown-item>
