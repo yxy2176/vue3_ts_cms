@@ -5,10 +5,6 @@ import cmsRequest from '@/service'
 export function postUserListData(queryInfo: any) {
   return cmsRequest.post({
     url: '/users/list',
-    // data: {
-    //   offset: 0,
-    //   size: 10,
-    // },
     data: queryInfo,
   })
 }
@@ -31,5 +27,33 @@ export function editUserData(id: number, userInfo: any) {
   return cmsRequest.patch({
     url: `/users/${id}`,
     data: userInfo,
+  })
+}
+
+// 针对页面的网络请求：增删改查
+export function postPageListData(pageName: string, queryInfo: any) {
+  return cmsRequest.post({
+    url: `/${pageName}/list`,
+    data: queryInfo,
+  })
+}
+
+export function newPageData(pageName: string, pageInfo: any) {
+  return cmsRequest.post({
+    url: `/${pageName}`,
+    data: pageInfo,
+  })
+}
+
+export function deletePageDataById(pageName: string, id: number) {
+  return cmsRequest.delete({
+    url: `/${pageName}/${id}`,
+  })
+}
+
+export function editPageData(pageName: string, id: number, pageInfo: any) {
+  return cmsRequest.patch({
+    url: `/${pageName}/${id}`,
+    data: pageInfo,
   })
 }

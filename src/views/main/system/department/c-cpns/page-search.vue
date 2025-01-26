@@ -3,32 +3,16 @@
     <el-form :model="searchForm" ref="formRef" label-width="80px" size="large">
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="searchForm.name" placeholder="请输入查询的用户名" />
+          <el-form-item label="部门名称" prop="name">
+            <el-input v-model="searchForm.name" placeholder="请输入查询的部门名称" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="真实姓名" prop="realName">
-            <el-input v-model="searchForm.realName" placeholder="请输入查询的真实姓名" />
+          <el-form-item label="部门领导" prop="leader">
+            <el-input v-model="searchForm.leader" placeholder="请输入查询的领导名称" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="searchForm.cellphone" placeholder="请输入查询的手机号码" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="状态" prop="enable">
-            <el-select
-              v-model="searchForm.enable"
-              placeholder="请选择想要查询的状态"
-              style="width: 100%"
-            >
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-        </el-col>
+
         <el-col :span="8">
           <el-form-item label="创建时间" prop="createAt">
             <el-date-picker
@@ -44,8 +28,10 @@
     </el-form>
 
     <div class="btns">
-      <el-button icon="Refresh" @click="handleResetClick">重置</el-button>
-      <el-button icon="Search" @click="handleQueryClick" type="primary">查询</el-button>
+      <el-button icon="Refresh" @click="handleResetClick" size="large">重置</el-button>
+      <el-button icon="Search" @click="handleQueryClick" size="large" type="primary"
+        >查询</el-button
+      >
     </div>
   </div>
 </template>
@@ -56,11 +42,9 @@ import { reactive, ref } from 'vue'
 const emit = defineEmits(['resetClick', 'queryClick'])
 
 const searchForm = reactive({
-  name: '', // 用户名
-  realName: '', // 真实姓名
-  cellphone: '', // 手机号码
-  enable: '', // 状态  -> 1：启用 & 0：禁用
-  createAt: '', // 创建时间（包含 开始时间 和 结束时间）
+  name: '', // 部门名称
+  leader: '', //部门领导
+  createAt: '', //创建时间
 })
 
 const formRef = ref<InstanceType<typeof ElForm>>()
@@ -90,7 +74,7 @@ function handleQueryClick() {
 
 .btns {
   text-align: right;
-  padding: 0px 50px 10px 0;
+  padding: 10px 20px 10px 0;
   .el-button {
     height: 35px;
   }

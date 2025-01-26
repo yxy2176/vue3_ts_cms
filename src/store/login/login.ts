@@ -65,7 +65,11 @@ const useLoginStore = defineStore('login', {
         this.userInfo = userInfo
         this.userMenus = userMenus
 
-        // 动态添加路由
+        // 1、请求所有的roles/departments的数据
+        const mainStore = useMainStore()
+        mainStore.fetchEntireDataAction()
+
+        // 2、动态添加路由
         const routes = mapMenusToRoutes(userMenus)
         routes.forEach((route) => router.addRoute('main', route))
       }

@@ -2,34 +2,20 @@
   <div class="modal">
     <el-dialog
       v-model="dialogVisible"
-      :title="isNewRef ? '新建用户' : '编辑用户'"
+      :title="isNewRef ? '新建部门' : '编辑部门'"
       width="30%"
       center
     >
       <div class="dialogForm">
         <el-form :model="dialogFormData" label-width="70px" size="large">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="dialogFormData.name" placeholder="请输入用户名" />
+          <el-form-item label="部门名称" prop="name">
+            <el-input v-model="dialogFormData.name" placeholder="请输入部门名称" />
           </el-form-item>
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model="dialogFormData.realname" placeholder="请输入真实姓名" />
+          <el-form-item label="部门领导" prop="leader">
+            <el-input v-model="dialogFormData.leader" placeholder="请输入部门领导" />
           </el-form-item>
-          <el-form-item label="密码" v-if="isNewRef" prop="password">
-            <el-input v-model="dialogFormData.password" placeholder="请输入密码" />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="dialogFormData.cellphone" placeholder="请输入手机号码" />
-          </el-form-item>
-          <el-form-item label="选择角色" prop="roleId">
-            <!-- <el-input v-model="dialogFormData.roleId" placeholder="请输入角色" /> -->
-            <el-select v-model="dialogFormData.roleId" placeholder="请选择角色">
-              <template v-for="item in entireRoles" :key="item.id">
-                <el-option :label="item.name" :value="item.id"></el-option>
-              </template>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择部门" prop="departmentId">
-            <el-select v-model="dialogFormData.departmentId">
+          <el-form-item label="选择部门" prop="parentId">
+            <el-select v-model="dialogFormData.parentId" placeholder="请选择部门">
               <template v-for="item in entireDepartments" :key="item.id">
                 <el-option :label="item.name" :value="item.id"></el-option>
               </template>
@@ -54,29 +40,24 @@ import { ref, reactive } from 'vue'
 const dialogVisible = ref(false)
 const dialogFormData = reactive<any>({
   name: '',
-  realname: '',
-  password: '',
-  cellphone: '',
-  departmentId: '',
-  roleId: '',
+  leader: '',
+  parentId: '',
 })
-// 是否是新建 还是 编辑 （true 为新建，false 为编辑）
 const isNewRef = ref(true)
 const editData = ref()
-
-const mainStore = useMainStore()
-const { entireRoles, entireDepartments } = storeToRefs(mainStore)
-
 const systemStore = useSystemStore()
+const mainStore = useMainStore()
+
+const { entireDepartments } = storeToRefs(mainStore)
 
 function handleConfirmClick() {
   dialogVisible.value = false
   if (!isNewRef.value && editData.value) {
     // 编辑
-    systemStore.editUserDataAction(editData.value.id, dialogFormData)
+    systemStore.editPageDataAction('department', editData.value.id, dialogFormData)
   } else {
     // 新建
-    systemStore.newUserDataAction(dialogFormData)
+    systemStore.newPageDataAction('department', dialogFormData)
   }
 }
 
