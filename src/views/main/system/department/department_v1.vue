@@ -1,19 +1,15 @@
+<!-- 不使用config时候写的页面 -->
 <template>
   <div class="department">
-    <page-search
-      :search-config="searchConfig"
-      @reset-click="handleResetClick"
-      @query-click="handleQueryClick"
-    />
+    <page-search @reset-click="handleResetClick" @query-click="handleQueryClick" />
     <page-content ref="contentRef" @edit-click="handleEditClick" @new-click="handleNewClick" />
     <page-modal ref="modalRef" />
   </div>
 </template>
 <script setup lang="ts">
 import pageContent from './c-cpns/page-content.vue'
-import pageSearch from '@/components/page-search/page-search.vue'
+import pageSearch from './c-cpns/page-search.vue'
 import pageModal from './c-cpns/page-modal.vue'
-import searchConfig from './config/search-config'
 import { ref } from 'vue'
 
 const contentRef = ref<InstanceType<typeof pageContent>>()
