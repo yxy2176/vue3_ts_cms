@@ -1,14 +1,11 @@
-import {
-  accountLoginRequest,
-  getUserInfoById,
-  getUserMenusByRoleId,
-} from '@/service/login/login'
+import { accountLoginRequest, getUserInfoById, getUserMenusByRoleId } from '@/service/login/login'
 import type { IAccount } from '@/types'
 import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
 import { LOGIN_TOKEN } from '@/global/constants'
 import router from '@/router'
 import { mapMenusToRoutes } from '@/utils/map-menus'
+import useMainStore from '../main/main'
 
 interface ILoginState {
   token: string
@@ -46,6 +43,10 @@ const useLoginStore = defineStore('login', {
       // 4、进行本地缓存
       localCache.setCache('userInfo', userInfo)
       localCache.setCache('userMenus', userMenus)
+
+      // 5、请求所有roles & departments的数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
 
       // 这里也要动态添加路由！不然刚进页面的时候就都是404了，得刷新才有。
       const routes = mapMenusToRoutes(userMenus)

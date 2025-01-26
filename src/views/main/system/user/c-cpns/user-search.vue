@@ -18,7 +18,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="状态" prop="status">
+          <el-form-item label="状态" prop="enable">
             <el-select
               v-model="searchForm.enable"
               placeholder="请选择想要查询的状态"
@@ -30,8 +30,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="创建时间" v-model="searchForm.createAt" prop="createAt">
+          <el-form-item label="创建时间" prop="createAt">
             <el-date-picker
+              v-model="searchForm.createAt"
               type="daterange"
               range-separator="-"
               start-placeholder="开始时间"

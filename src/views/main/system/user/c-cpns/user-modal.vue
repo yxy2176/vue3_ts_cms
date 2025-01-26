@@ -1,6 +1,11 @@
 <template>
   <div class="modal">
-    <el-dialog v-model="dialogVisible" title="新建用户" width="30%" center>
+    <el-dialog
+      v-model="dialogVisible"
+      :title="isNewRef ? '新建用户' : '编辑用户'"
+      width="30%"
+      center
+    >
       <div class="dialogForm">
         <el-form :model="dialogFormData" label-width="70px" size="large">
           <el-form-item label="用户名" prop="name">
@@ -18,11 +23,17 @@
           <el-form-item label="选择角色" prop="roleId">
             <!-- <el-input v-model="dialogFormData.roleId" placeholder="请输入角色" /> -->
             <el-select v-model="dialogFormData.roleId" placeholder="请输入角色">
-              <template v-for="item in entireRoles"></template>
+              <template v-for="item in entireRoles" :key="item.id">
+                <el-option :label="item.name" :value="item.id"></el-option>
+              </template>
             </el-select>
           </el-form-item>
           <el-form-item label="选择部门" prop="departmentId">
-            <el-input v-model="dialogFormData.departmentId" placeholder="请输入部门" />
+            <el-select v-model="dialogFormData.departmentId">
+              <template v-for="item in entireDepartments" :key="item.id">
+                <el-option :label="item.name" :value="item.id"></el-option>
+              </template>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -65,11 +76,22 @@ function handleConfirmClick() {
 }
 
 function setModalVisible(isNew: boolean = true, itemData?: any) {
+  isNewRef.value = isNew
   dialogVisible.value = true
-  for (const key in dialogFormData) {
-    dialogFormData[key] = ''
+
+  if (!isNew && itemData) {
+    // 编辑用户 的情况
+    for (const key in itemData) {
+      dialogFormData[key] = itemData[key]
+    }
+    editData.value = itemData
+  } else {
+    // 新建用户 的情况
+    for (const key in dialogFormData) {
+      dialogFormData[key] = ''
+    }
   }
-  // editData.value = null
+  editData.value = null
 }
 
 defineExpose({ setModalVisible })

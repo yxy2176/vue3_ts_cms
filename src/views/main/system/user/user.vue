@@ -3,8 +3,8 @@
     <user-search @reset-click="handleResetClick" @query-click="handleQueryClick"></user-search>
     <user-content
       ref="contentRef"
-      @new-click="handleNewUserClick"
-      @edit-click="handleEditUserClick"
+      @new-click="handleNewClick"
+      @edit-click="handleEditClick"
     ></user-content>
     <user-modal ref="modalRef"></user-modal>
   </div>
@@ -29,11 +29,14 @@ function handleQueryClick(formData: any) {
 // 对modal组件的操作
 const modalRef = ref<InstanceType<typeof userModal>>()
 
-function handleNewUserClick() {
+function handleNewClick() {
   modalRef.value?.setModalVisible()
 }
 
-function handleEditUserClick() {}
+function handleEditClick(itemData: any) {
+  console.log('itemData: ', itemData)
+  modalRef.value?.setModalVisible(false, itemData)
+}
 </script>
 <style lang="less" scoped>
 .user {
