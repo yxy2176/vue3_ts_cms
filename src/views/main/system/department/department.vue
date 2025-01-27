@@ -5,15 +5,28 @@
       @reset-click="handleResetClick"
       @query-click="handleQueryClick"
     />
-    <page-content ref="contentRef" @edit-click="handleEditClick" @new-click="handleNewClick" />
+    <page-content
+      :content-config="contentConfig"
+      ref="contentRef"
+      @edit-click="handleEditClick"
+      @new-click="handleNewClick"
+    >
+      <!-- <template #leader="scope">
+        <span class="leader">哈哈哈: {{ scope.row[scope.prop] }}</span>
+      </template>
+      <template #parent="scope">
+        <span class="parent">呵呵呵: {{ scope.row[scope.prop] }}</span>
+      </template> -->
+    </page-content>
     <page-modal ref="modalRef" />
   </div>
 </template>
 <script setup lang="ts">
-import pageContent from './c-cpns/page-content.vue'
+import pageContent from '@/components/page-content/page-content.vue'
 import pageSearch from '@/components/page-search/page-search.vue'
-import pageModal from './c-cpns/page-modal.vue'
+import pageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search-config'
+import contentConfig from './config/content-config'
 import { ref } from 'vue'
 
 const contentRef = ref<InstanceType<typeof pageContent>>()
