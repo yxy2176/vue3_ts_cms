@@ -8,19 +8,23 @@
     >
       <div class="dialogForm">
         <el-form :model="dialogFormData" label-width="70px" size="large">
-          <el-form-item label="部门名称" prop="name">
-            <el-input v-model="dialogFormData.name" placeholder="请输入部门名称" />
-          </el-form-item>
-          <el-form-item label="部门领导" prop="leader">
-            <el-input v-model="dialogFormData.leader" placeholder="请输入部门领导" />
-          </el-form-item>
-          <el-form-item label="选择部门" prop="parentId">
-            <el-select v-model="dialogFormData.parentId" placeholder="请选择部门">
-              <template v-for="item in entireDepartments" :key="item.id">
-                <el-option :label="item.name" :value="item.id"></el-option>
+          <template v-for="item in props.modalConfig.formItems" :key="item.prop">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <template v-if="item.type === 'input'">
+                <el-input
+                  v-model="dialogFormData[item.prop]"
+                  :placeholder="item.placeholder"
+                ></el-input>
               </template>
-            </el-select>
-          </el-form-item>
+              <template v-else-if="item.type === 'select'">
+                <el-select v-model="dialogFormData[item.prop]" :placeholder="item.placeholder">
+                  <template v-for="item in entireDepartments" :key="item.id">
+                    <el-option :label="item.name" :value="item.id"></el-option>
+                  </template>
+                </el-select>
+              </template>
+            </el-form-item>
+          </template>
         </el-form>
       </div>
       <template #footer>
@@ -46,21 +50,27 @@ const dialogFormData = reactive<any>({
 const isNewRef = ref(true)
 const editData = ref()
 const systemStore = useSystemStore()
-const mainStore = useMainStore()
 
-const { entireDepartments } = storeToRefs(mainStore)
-
-function handleConfirmClick() {
-  dialogVisible.value = false
-  if (!isNewRef.value && editData.value) {
-    // 编辑
-    systemStore.editPageDataAction('department', editData.value.id, dialogFormData)
-  } else {
-    // 新建
-    systemStore.newPageDataAction('department', dialogFormData)
+// 0：定义props
+interface IProps {
+  modalConfig: {
+    pageName: string
+    header: {
+      newTitle: string
+      editTitle: string
+    }
+    formItems: any[]
   }
+  otherInfo?: any
 }
 
+const props = defineProps<IProps>()
+
+// 1、获取department数据
+const mainStore = useMainStore()
+const { entireDepartments } = storeToRefs(mainStore)
+
+// 2、modal提示框的内容显示
 function setModalVisible(isNew: boolean = true, itemData?: any) {
   isNewRef.value = isNew
   dialogVisible.value = true
@@ -73,10 +83,27 @@ function setModalVisible(isNew: boolean = true, itemData?: any) {
     editData.value = itemData
   } else {
     // 新建用户 的情况
+    // for (const key in dialogFormData) {
+    //   dialogFormData[key] = ''
+    // }
     for (const key in dialogFormData) {
-      dialogFormData[key] = ''
+      // 若config里有初始化数据
+      const item = props.modalConfig.formItems.find((item) => item.prop === key)
+      dialogFormData[key] = item ? item.initialValue : ''
     }
     editData.value = null
+  }
+}
+
+// 3、点击了确定后的逻辑
+function handleConfirmClick() {
+  dialogVisible.value = false
+  if (!isNewRef.value && editData.value) {
+    // 编辑
+    systemStore.editPageDataAction(props.modalConfig.pageName, editData.value.id, dialogFormData)
+  } else {
+    // 新建
+    systemStore.newPageDataAction(props.modalConfig.pageName, dialogFormData)
   }
 }
 

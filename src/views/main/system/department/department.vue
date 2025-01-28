@@ -18,16 +18,17 @@
         <span class="parent">呵呵呵: {{ scope.row[scope.prop] }}</span>
       </template> -->
     </page-content>
-    <page-modal ref="modalRef" />
+    <page-modal ref="modalRef" :modal-config="modalConfig" />
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue'
 import pageContent from '@/components/page-content/page-content.vue'
 import pageSearch from '@/components/page-search/page-search.vue'
 import pageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search-config'
 import contentConfig from './config/content-config'
-import { ref } from 'vue'
+import modalConfig from './config/modal-config'
 
 const contentRef = ref<InstanceType<typeof pageContent>>()
 // 点击search模块的重置按钮
