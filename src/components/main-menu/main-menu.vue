@@ -24,10 +24,7 @@
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subItem in item.children">
-              <el-menu-item
-                :index="subItem.id"
-                @click="handleItemClick(subItem)"
-              >
+              <el-menu-item :index="subItem.id" @click="handleItemClick(subItem)">
                 {{ subItem.name }}
               </el-menu-item>
             </template>
@@ -57,7 +54,7 @@ const userMenus = loginStore.userMenus
 const router = useRouter()
 function handleItemClick(item: any) {
   // console.log('item:', item)
-  const url= item.url
+  const url = item.url
   router.push(url)
 }
 </script>
@@ -69,22 +66,43 @@ function handleItemClick(item: any) {
 
 .logo {
   display: flex;
-  flex-direction: row;
-  height: 20px;
-  align-items: center;
-  justify-content: start;
+  height: 28px;
   padding: 12px 10px 8px 10px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+
   .img {
     height: 100%;
     margin: 0 10px;
   }
+
   .title {
-    color: white;
     font-size: 16px;
     font-weight: 700;
+    color: white;
     white-space: nowrap;
-    margin-left: 14px;
-    margin-bottom: 3px;
+  }
+}
+
+.el-menu {
+  border-right: none;
+  user-select: none;
+}
+
+.el-sub-menu {
+  .el-menu-item {
+    padding-left: 50px !important;
+    background-color: #0c2135;
+  }
+
+  .el-menu-item:hover {
+    color: #fff;
+  }
+
+  .el-menu-item.is-active {
+    background-color: #0a60bd;
   }
 }
 </style>
