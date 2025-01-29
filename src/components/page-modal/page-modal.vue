@@ -18,8 +18,11 @@
               </template>
               <template v-else-if="item.type === 'select'">
                 <el-select v-model="dialogFormData[item.prop]" :placeholder="item.placeholder">
-                  <template v-for="item in entireDepartments" :key="item.id">
+                  <!-- <template v-for="item in entireDepartments" :key="item.id">
                     <el-option :label="item.name" :value="item.id"></el-option>
+                  </template> -->
+                  <template v-for="option in item.options" :key="option.value">
+                    <el-option :label="option.label" :value="option.value"></el-option>
                   </template>
                 </el-select>
               </template>
@@ -37,9 +40,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import useMainStore from '@/store/main/main'
 import useSystemStore from '@/store/main/system/system'
-import { storeToRefs } from 'pinia'
 import { ref, reactive } from 'vue'
 const dialogVisible = ref(false)
 const dialogFormData = reactive<any>({
@@ -65,10 +66,6 @@ interface IProps {
 }
 
 const props = defineProps<IProps>()
-
-// 1、获取department数据
-const mainStore = useMainStore()
-const { entireDepartments } = storeToRefs(mainStore)
 
 // 2、modal提示框的内容显示
 function setModalVisible(isNew: boolean = true, itemData?: any) {

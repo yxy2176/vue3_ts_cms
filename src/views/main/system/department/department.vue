@@ -18,37 +18,40 @@
         <span class="parent">呵呵呵: {{ scope.row[scope.prop] }}</span>
       </template> -->
     </page-content>
-    <page-modal ref="modalRef" :modal-config="modalConfig" />
+    <page-modal ref="modalRef" :modal-config="modalConfigRef" />
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import pageContent from '@/components/page-content/page-content.vue'
 import pageSearch from '@/components/page-search/page-search.vue'
 import pageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search-config'
 import contentConfig from './config/content-config'
 import modalConfig from './config/modal-config'
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
+import useMainStore from '@/store/main/main'
 
-const contentRef = ref<InstanceType<typeof pageContent>>()
-// 点击search模块的重置按钮
-function handleResetClick() {
-  contentRef.value?.fetchPageListData()
-}
+const modalConfigRef = computed(() => {
+  // 1、获取department数据
+  const mainStore = useMainStore()
+  const departments = mainStore.entireDepartments.map((item) => {
+    return { label: item.name, value: item.id }
+  })
+  modalConfig.formItems.forEach((item) => {
+    if (item.prop === 'parentId') {
+      item.options.push(...departments)
+    }
+  })
 
-function handleQueryClick(queryInfo: any) {
-  contentRef.value?.fetchPageListData(queryInfo)
-}
+  return modalConfig
+})
 
-//content模块的按钮的操作
-const modalRef = ref<InstanceType<typeof pageModal>>()
-function handleEditClick(itemData: any) {
-  modalRef.value?.setModalVisible(false, itemData)
-}
-
-function handleNewClick() {
-  modalRef.value?.setModalVisible()
-}
+// content部分的点击
+const { contentRef, handleResetClick, handleQueryClick } = usePageContent()
+// modal部分的点击
+const { modalRef, handleEditClick, handleNewClick } = usePageModal()
 </script>
 <style lang="less" scoped>
 .department {
