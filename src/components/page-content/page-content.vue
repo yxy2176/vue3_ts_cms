@@ -7,7 +7,7 @@
     </div>
     <!-- 表格区域 -->
     <div class="table">
-      <el-table :data="pageList" border>
+      <el-table :data="pageList" border v-bind="contentConfig.childrenTree">
         <template v-for="item in contentConfig.propList" :key="item.prop">
           <template v-if="item.type === 'timer'">
             <el-table-column align="center" v-bind="item">

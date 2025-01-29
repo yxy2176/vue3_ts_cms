@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <h3>menu.vue</h3>
+  <div class="menu">
+    <page-content :content-config="contentConfig" ref="contentRef"> </page-content>
   </div>
 </template>
-<script setup lang="ts"></script>
-<style lang="less" scoped></style>
+<script setup lang="ts">
+import pageContent from '@/components/page-content/page-content.vue'
+import contentConfig from './config/content-config'
+</script>
+<style lang="less" scoped>
+.menu {
+  border-radius: 8px;
+  overflow: hidden;
+}
+</style>
