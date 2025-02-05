@@ -3,7 +3,9 @@
     <!-- 头部部分 -->
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
-      <el-button type="primary" @click="handleNewUserClick">新建部门</el-button>
+      <el-button type="primary" @click="handleNewUserClick">{{
+        contentConfig?.header?.btnTitle ?? '新建数据'
+      }}</el-button>
     </div>
     <!-- 表格区域 -->
     <div class="table">

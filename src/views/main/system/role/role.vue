@@ -12,7 +12,18 @@
       @new-click="handleNewClick"
     >
     </page-content>
-    <page-modal ref="modalRef" :modal-config="modalConfig" />
+    <page-modal ref="modalRef" :modal-config="modalConfig" :other-info="otherInfo">
+      <template #menulist>
+        <el-tree
+          ref="treeRef"
+          :data="entireMenus"
+          :props="{ children: 'children', label: 'name' }"
+          node-key="id"
+          show-checkbox
+          @check="handleElTreeCheck"
+        />
+      </template>
+    </page-modal>
   </div>
 </template>
 <script setup lang="ts">
@@ -23,26 +34,36 @@ import pageModal from '@/components/page-modal/page-modal.vue'
 import searchConfig from './config/search-config'
 import contentConfig from './config/content-config'
 import modalConfig from './config/modal-config'
+import usePageContent from '@/hooks/usePageContent'
+import usePageModal from '@/hooks/usePageModal'
+import useMainStore from '@/store/main/main'
+import { storeToRefs } from 'pinia'
+import type { ElTree } from 'element-plus'
 
-const contentRef = ref<InstanceType<typeof pageContent>>()
-// 点击search模块的重置按钮
-function handleResetClick() {
-  contentRef.value?.fetchPageListData()
+// 点击按钮的逻辑功能
+// content部分的点击
+const { contentRef, handleResetClick, handleQueryClick } = usePageContent()
+// modal部分的点击
+const { modalRef, handleEditClick, handleNewClick } = usePageModal(editCallback)
+
+// modal部分的菜单部分
+const mainStore = useMainStore()
+const { entireMenus } = storeToRefs(mainStore)
+const otherInfo = ref({})
+
+function handleElTreeCheck(currentNode: any, selectedNode: any) {
+  // 共两个参数
+  // 依次为：传递给 data 属性的数组中该节点所对应的对象、树目前的选中状态对象，
+  // 包含 checkedNodes、checkedKeys、halfCheckedNodes、halfCheckedKeys 四个属性
+  const menuList = [...selectedNode.checkedKeys, ...selectedNode.halfCheckedKeys]
+  otherInfo.value = { menuList }
 }
 
-function handleQueryClick(queryInfo: any) {
-  contentRef.value?.fetchPageListData(queryInfo)
+const treeRef = ref<InstanceType<typeof ElTree>>()
+function editCallback(itemData:any){
+  
 }
 
-//content模块的按钮的操作
-const modalRef = ref<InstanceType<typeof pageModal>>()
-function handleEditClick(itemData: any) {
-  modalRef.value?.setModalVisible(false, itemData)
-}
-
-function handleNewClick() {
-  modalRef.value?.setModalVisible()
-}
 </script>
 <style lang="less" scoped>
 .department {

@@ -2,7 +2,7 @@
   <div class="modal">
     <el-dialog
       v-model="dialogVisible"
-      :title="isNewRef ? '新建部门' : '编辑部门'"
+      :title="isNewRef ? modalConfig.header.newTitle : modalConfig.header.editTitle"
       width="30%"
       center
     >
@@ -16,6 +16,15 @@
                   :placeholder="item.placeholder"
                 ></el-input>
               </template>
+              <template v-else-if="item.type === 'date-picker'">
+                <el-date-picker
+                  v-model="formData[item.prop]"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                />
+              </template>
               <template v-else-if="item.type === 'select'">
                 <el-select v-model="dialogFormData[item.prop]" :placeholder="item.placeholder">
                   <!-- <template v-for="item in entireDepartments" :key="item.id">
@@ -25,6 +34,9 @@
                     <el-option :label="option.label" :value="option.value"></el-option>
                   </template>
                 </el-select>
+              </template>
+              <template v-else-if="item.type === 'custom'">
+                <slot :name="item.slotName"></slot>
               </template>
             </el-form-item>
           </template>
@@ -40,6 +52,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import useMainStore from '@/store/main/main'
 import useSystemStore from '@/store/main/system/system'
 import { ref, reactive } from 'vue'
 const dialogVisible = ref(false)
@@ -51,6 +64,8 @@ const dialogFormData = reactive<any>({
 const isNewRef = ref(true)
 const editData = ref()
 const systemStore = useSystemStore()
+
+const mainStore = useMainStore()
 
 // 0：定义props
 interface IProps {

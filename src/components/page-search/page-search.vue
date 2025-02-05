@@ -7,28 +7,34 @@
       size="large"
     >
       <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="部门名称" prop="name">
-            <el-input v-model="searchForm.name" placeholder="请输入查询的部门名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="部门领导" prop="leader">
-            <el-input v-model="searchForm.leader" placeholder="请输入查询的领导名称" />
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="8">
-          <el-form-item label="创建时间" prop="createAt">
-            <el-date-picker
-              v-model="searchForm.createAt"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-            />
-          </el-form-item>
-        </el-col>
+        <template v-for="item in searchConfig.formItems" :key="item.prop">
+          <el-col :span="8">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <template v-if="item.type === 'input'">
+                <el-input
+                  v-model="searchForm[item.prop]"
+                  :placeholder="item.placeholder"
+                ></el-input>
+              </template>
+              <template v-if="item.type === 'date-picker'">
+                <el-date-picker
+                  v-model="searchForm[item.prop]"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                />
+              </template>
+              <template v-if="item.type === 'select'">
+                <el-select v-model="searchForm[item.prop]" :placeholder="item.placeholder">
+                  <template v-for="option in item.options" :key="option.value">
+                    <el-option :label="option.label" :value="option.value"></el-option>
+                  </template>
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+        </template>
       </el-row>
     </el-form>
 

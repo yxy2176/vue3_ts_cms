@@ -9,7 +9,7 @@
     <!-- 2、menu部分 -->
     <div class="menu">
       <el-menu
-        default-active="2"
+        :default-active="defaultActive"
         :collapse="isFold"
         text-color="#b7bdc3"
         background-color="#001529"
@@ -36,7 +36,9 @@
 </template>
 <script setup lang="ts">
 import useLoginStore from '@/store/login/login'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { mapPathToMenus } from '@/utils/map-menus'
 
 // 0、定义Props
 defineProps({
@@ -57,6 +59,13 @@ function handleItemClick(item: any) {
   const url = item.url
   router.push(url)
 }
+
+// 3、ElMenu的默认菜单显示
+const route = useRoute() //useRoute()获取当前路由对象，而useRouter()用于路由跳转等操作
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenus(route.path, userMenus)
+  return pathMenu.id + ''
+})
 </script>
 <style lang="less" scoped>
 .main-menu {
