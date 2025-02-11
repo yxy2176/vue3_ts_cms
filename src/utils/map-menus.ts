@@ -53,3 +53,8 @@ export function mapPathToMenus(path: string, userMenus: any[]) {
     }
   }
 }
+
+
+export function mapPathToBreadcrumbs(){
+  
+}
