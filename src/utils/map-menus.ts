@@ -54,7 +54,21 @@ export function mapPathToMenus(path: string, userMenus: any[]) {
   }
 }
 
-
-export function mapPathToBreadcrumbs(){
-  
+interface IBreadcrumbs {
+  name: string
+  path: string
+}
+export function mapPathToBreadcrumbs(path: string, userMenus: any[]) {
+  const breadcrumbs: IBreadcrumbs[] = []
+  for (const menu of userMenus) {
+    for (const subMenu of menu.children) {
+      if (subMenu.url === path) {
+        // 1 顶层菜单
+        breadcrumbs.push({ name: menu.name, path: menu.url })
+        // 2 当前的匹配菜单
+        breadcrumbs.push({ name: subMenu.name, path: subMenu.url })
+      }
+    }
+  }
+  return breadcrumbs
 }

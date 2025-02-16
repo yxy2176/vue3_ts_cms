@@ -20,15 +20,13 @@
         <span class="user-info">
           <el-avatar
             :size="30"
-            src="@/assets/img/avatar.jpg"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
           />
           <span class="name">JennyYao</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item
-              @click="handleExitClick"
-            >
+            <el-dropdown-item @click="handleExitClick">
               <el-icon><CircleClose /></el-icon>
               <span>退出系统</span>
             </el-dropdown-item>
@@ -92,5 +90,9 @@ function handleExitClick() {
     align-items: center;
     cursor: pointer;
   }
+}
+
+.name {
+  margin-left: 5px;
 }
 </style>
