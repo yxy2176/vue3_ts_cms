@@ -27,7 +27,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import pageContent from '@/components/page-content/page-content.vue'
 import pageSearch from '@/components/page-search/page-search.vue'
 import pageModal from '@/components/page-modal/page-modal.vue'
@@ -39,6 +39,7 @@ import usePageModal from '@/hooks/usePageModal'
 import useMainStore from '@/store/main/main'
 import { storeToRefs } from 'pinia'
 import type { ElTree } from 'element-plus'
+import { mapMenuListToIds } from '@/utils/map-menus'
 
 // 点击按钮的逻辑功能
 // content部分的点击
@@ -60,10 +61,13 @@ function handleElTreeCheck(currentNode: any, selectedNode: any) {
 }
 
 const treeRef = ref<InstanceType<typeof ElTree>>()
-function editCallback(itemData:any){
-  
+// 编辑modal的回显
+function editCallback(itemData: any) {
+  nextTick(() => {
+    const menuIds = mapMenuListToIds(itemData.menuList)
+    treeRef.value?.setCheckedKeys(menuIds)
+  })
 }
-
 </script>
 <style lang="less" scoped>
 .department {

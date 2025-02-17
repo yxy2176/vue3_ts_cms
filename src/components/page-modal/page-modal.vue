@@ -52,10 +52,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import useMainStore from '@/store/main/main'
-import useSystemStore from '@/store/main/system/system'
 import { ref, reactive } from 'vue'
+import useSystemStore from '@/store/main/system/system'
+
 const dialogVisible = ref(false)
+
 const dialogFormData = reactive<any>({
   name: '',
   leader: '',
@@ -64,8 +65,6 @@ const dialogFormData = reactive<any>({
 const isNewRef = ref(true)
 const editData = ref()
 const systemStore = useSystemStore()
-
-const mainStore = useMainStore()
 
 // 0：定义props
 interface IProps {
@@ -110,12 +109,16 @@ function setModalVisible(isNew: boolean = true, itemData?: any) {
 // 3、点击了确定后的逻辑
 function handleConfirmClick() {
   dialogVisible.value = false
+  let infoData = dialogFormData
+  if (props.otherInfo) {
+    infoData = { ...dialogFormData, ...props.otherInfo }
+  }
   if (!isNewRef.value && editData.value) {
     // 编辑
-    systemStore.editPageDataAction(props.modalConfig.pageName, editData.value.id, dialogFormData)
+    systemStore.editPageDataAction(props.modalConfig.pageName, editData.value.id, infoData)
   } else {
     // 新建
-    systemStore.newPageDataAction(props.modalConfig.pageName, dialogFormData)
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   }
 }
 
