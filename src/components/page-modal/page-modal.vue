@@ -18,7 +18,7 @@
               </template>
               <template v-else-if="item.type === 'date-picker'">
                 <el-date-picker
-                  v-model="formData[item.prop]"
+                  v-model="dialogFormData[item.prop]"
                   type="daterange"
                   range-separator="-"
                   start-placeholder="开始时间"
