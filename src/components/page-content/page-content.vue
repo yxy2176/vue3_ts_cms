@@ -3,7 +3,7 @@
     <!-- 头部部分 -->
     <div class="header">
       <h3 class="title">{{ contentConfig?.header?.title ?? '数据列表' }}</h3>
-      <el-button type="primary" @click="handleNewUserClick">{{
+      <el-button v-if="isCreate" type="primary" @click="handleNewUserClick">{{
         contentConfig?.header?.btnTitle ?? '新建数据'
       }}</el-button>
     </div>
@@ -22,6 +22,7 @@
             <el-table-column align="center" v-bind="item">
               <template #default="scope">
                 <el-button
+                  v-if="isUpdate"
                   size="small"
                   icon="edit"
                   type="primary"
@@ -30,6 +31,7 @@
                   >编辑</el-button
                 >
                 <el-button
+                  v-if="isDelete"
                   size="small"
                   icon="delete"
                   type="danger"
@@ -71,6 +73,7 @@ import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/main/system/system'
 import { ref } from 'vue'
 import { formatUTC } from '@/utils/format'
+import usePermissions from '@/hooks/usePermissions'
 
 interface IProps {
   contentConfig: {
@@ -105,6 +108,9 @@ function handleCurrentChange() {
 }
 
 function fetchPageListData(formData: any = {}) {
+  // 若没有查询权限
+  if (!isQuery) return
+
   // 1、获取offset & size
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
@@ -129,6 +135,11 @@ function handleDeleteBtnClick(id: number) {
 function handleNewUserClick() {
   emit('newClick')
 }
+
+const isUpdate = usePermissions(`${props.contentConfig.pageName}:update`)
+const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
+const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
+const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
 
 defineExpose({ fetchPageListData })
 </script>

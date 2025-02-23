@@ -10,6 +10,7 @@ import {
 } from '@/service/main/system/system'
 import { defineStore } from 'pinia'
 import type { ISystemState } from './type'
+import useMainStore from '../main'
 
 const useSystemStore = defineStore('system', {
   state: (): ISystemState => ({
@@ -74,6 +75,10 @@ const useSystemStore = defineStore('system', {
       const deleteResult = await deletePageDataById(pageName, id)
       console.log('deleteResult: ', deleteResult)
       this.postPagelistAction(pageName, { offset: 0, size: 10 })
+
+      // 获取完整的权限
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
     },
 
     async newPageDataAction(pageName: string, pageInfo: any) {

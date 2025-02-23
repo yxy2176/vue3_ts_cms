@@ -1,3 +1,4 @@
+import menu from '@/router/main/system/menu/menu'
 import type { RouteRecordRaw } from 'vue-router'
 
 // 动态获取所有的路由对象，并放到localRoutes该数组中
@@ -90,4 +91,25 @@ export function mapMenuListToIds(menuList: any[]) {
   }
   recurseGetId(menuList)
   return ids
+}
+
+/**
+ * 从菜单映射到按钮的权限
+ * @param menuList 菜单的列表
+ * @returns 权限的数组（字符串数组）
+ */
+export function mapMenusToPermissions(menuList: any[]) {
+  const permissions: string[] = []
+
+  function recurseGetPermission(menus: any[]) {
+    for (const menu of menus) {
+      if (menu.type === 3) {
+        permissions.push(menu.permission)
+      } else {
+        recurseGetPermission(menu.children ?? [])
+      }
+    }
+  }
+  recurseGetPermission(menuList)
+  return permissions
 }
