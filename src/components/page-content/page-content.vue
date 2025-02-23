@@ -90,6 +90,11 @@ interface IProps {
 // props传入数据
 const props = defineProps<IProps>()
 
+const isUpdate = usePermissions(`${props.contentConfig.pageName}:update`)
+const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
+const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
+const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
+
 // 1、发起action，请求usersList的数据
 const systemStore = useSystemStore()
 const currentPage = ref(1)
@@ -136,10 +141,7 @@ function handleNewUserClick() {
   emit('newClick')
 }
 
-const isUpdate = usePermissions(`${props.contentConfig.pageName}:update`)
-const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
-const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
-const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
+
 
 defineExpose({ fetchPageListData })
 </script>
