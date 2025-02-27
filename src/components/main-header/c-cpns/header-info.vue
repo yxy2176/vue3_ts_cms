@@ -12,6 +12,14 @@
       <span>
         <el-icon><Search /></el-icon>
       </span>
+      <el-switch
+        v-model="isDark"
+        inline-prompt
+        active-text="dark"
+        size="large"
+        inactive-text="light"
+        @change="toggleDark($event as boolean)"
+      />
     </div>
 
     <!-- 2、个人信息 -->
@@ -48,12 +56,27 @@
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
 import { useRouter } from 'vue-router'
+import { useDark, useToggle } from '@vueuse/core'
 
 const router = useRouter()
 function handleExitClick() {
   localCache.removeCache(LOGIN_TOKEN)
   router.push('/login')
 }
+
+// 暗黑模式切换
+const isDark = useDark()
+// const isDark = useDark({
+//   selector: 'div',
+//   attribute: 'color-scheme',
+//   valueDark: 'dark',
+//   valueLight: 'light',
+// })
+const toggleDark = useToggle(isDark)
+// const toggleDark = (value: boolean) => {
+//   isDark.value = value
+//   // 其他逻辑，如保存到 localStorage 或切换主题
+// }
 </script>
 <style lang="less" scoped>
 .header-info {

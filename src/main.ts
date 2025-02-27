@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import registerIcons from './global/register-icons'
+/** element-plus暗黑主题 */
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // createApp(App).use(router).mount('#app')
 const app = createApp(App)
