@@ -19,6 +19,7 @@
     "axios": "^1.7.9",
     "commitizen": "^4.3.1",
     "countup.js": "^2.8.0",
+    "echarts": "^5.6.0",
     "element-plus": "^2.9.3",
     "normalize.css": "^8.0.1",
     "pinia": "^2.3.0",
