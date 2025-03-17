@@ -3,7 +3,6 @@ import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import type { CMSRequestConfig } from './type'
 
 // 拦截器: 蒙版Loading/token/修改配置
-
 /**
  * 两个难点:
  *  1.拦截器进行精细控制
@@ -55,10 +54,6 @@ class CMSRequest {
   // T => IHomeData
   request<T = any>(config: CMSRequestConfig<T>) {
     // 单次请求的成功拦截处理
-    // if (config.interceptors?.requestSuccessFn) {
-    //   config = config.interceptors.requestSuccessFn(config)
-    // }
-    // 单次请求的成功拦截处理
     if (config.interceptors?.requestSuccessFn) {
       const successFn = config.interceptors.requestSuccessFn
 
@@ -72,7 +67,6 @@ class CMSRequest {
           return this.instance.request(resolvedConfig)
         })
       }
-
       // 如果直接返回了配置，继续执行请求
       config = result
     }
@@ -82,7 +76,7 @@ class CMSRequest {
       this.instance
         .request<any, T>(config)
         .then((res) => {
-          // 单词响应的成功拦截处理
+          // 单次响应的成功拦截处理
           if (config.interceptors?.responseSuccessFn) {
             res = config.interceptors.responseSuccessFn(res)
           }
